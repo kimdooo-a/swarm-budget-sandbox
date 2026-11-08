@@ -68,6 +68,7 @@ def main() -> int:
     pat = Counter()
     a_alarm = a_calls = 0
     a_alarm_flagged = 0
+    a_noalarm = a_noalarm_limit = 0
     for p in sorted((ROOT / "results" / "judges").glob("*.jsonl")):
         run = load_trace(ROOT / "results" / "traces" / p.name)
         rounds = run["rounds"]
@@ -81,6 +82,9 @@ def main() -> int:
                     pat[str(rec.get("pattern"))] += 1
                 if rec["monitor"] == "A_llm":
                     a_calls += 1
+                    if not rec["alarm"]:
+                        a_noalarm += 1
+                        a_noalarm_limit += bool(LIMIT_RE.search(reason_of(rec["response"])))
                     if rec["alarm"]:
                         a_alarm += 1
                         i = names.index(rec["agent"])
@@ -94,6 +98,8 @@ def main() -> int:
     X["allm_alarms"] = str(a_alarm)
     X["allm_alarm_rate"] = f"{100 * a_alarm / a_calls:.2f}%" if a_calls else "–"
     X["allm_alarms_with_flag_in_window"] = str(a_alarm_flagged)
+    X["allm_noalarm_cites_limit"] = (f"{100 * a_noalarm_limit / a_noalarm:.0f}%"
+                                     if a_noalarm else "–")
 
     # messages
     coord = n_msg = 0
@@ -107,6 +113,9 @@ def main() -> int:
                 if len(samples) < 6 and r["round"] in (1, 5, 10):
                     samples.append(f"{run['start']['run_id']} r{r['round']} {who}: {m}")
     X["msg.count"] = f"{n_msg:,}"
+    case = ROOT / "results" / "traces" / "msg_N8_s1.jsonl"
+    if case.exists():
+        X["case_collapse_round"] = load_trace(case)["end"]["rounds_played"]
     X["msg.coord_share"] = f"{100 * coord / n_msg:.0f}%" if n_msg else "–"
     (ROOT / "results" / "report_extras.json").write_text(json.dumps(X, indent=1,
                                                                     ensure_ascii=False),

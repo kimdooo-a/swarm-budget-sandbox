@@ -331,18 +331,24 @@ def figures(runs: list[dict], ctrl: list[dict], mon_rows: list[dict], sweep: lis
     # Fig 3: monitor detection vs false alarms
     rows = [r for r in mon_rows if r["detect_rate"] is not None]
     if rows:
-        fig, ax = plt.subplots(figsize=(4.6, 3.0))
+        fig, ax = plt.subplots(figsize=(4.6, 2.8))
+        pts: dict = {}
         for r in rows:
             fa = r["false_alarm_run_rate"] if r["false_alarm_run_rate"] is not None else 0
-            col = "#c0504d" if r["monitor"].startswith("A") else "#3b6ea5"
-            ax.scatter(fa, r["detect_rate"], s=40, color=col, zorder=3)
-            ax.annotate(r["monitor"], (fa, r["detect_rate"]), xytext=(4, 4),
+            pts.setdefault((round(fa, 4), round(r["detect_rate"], 4)), []).append(r["monitor"])
+        for (fa, dr), names in pts.items():
+            col = "#c0504d" if all(n.startswith("A") for n in names) else "#3b6ea5"
+            ax.scatter(fa, dr, s=40, color=col, zorder=3)
+            ax.annotate(", ".join(names), (fa, dr), xytext=(5, -12 if dr > 0.5 else 5),
                         textcoords="offset points", fontsize=8)
-        xs = [s["false_alarm_run_rate"] for s in sweep if s["false_alarm_run_rate"] is not None]
-        ys = [s["detect_rate"] for s in sweep if s["false_alarm_run_rate"] is not None]
-        ax.plot(xs, ys, color="#3b6ea5", alpha=0.4, lw=1, label="B_rate, horizon sweep")
-        ax.set_xlim(-0.05, 1.05)
-        ax.set_ylim(-0.05, 1.05)
+        sw = [s for s in sweep if s["false_alarm_run_rate"] is not None]
+        xs = [s["false_alarm_run_rate"] for s in sw]
+        ys = [s["detect_rate"] for s in sw]
+        ax.plot(xs, ys, color="#3b6ea5", alpha=0.4, lw=1, marker=".", ms=4,
+                label="B_rate, horizon H = 1 ... 20")
+        maxfa = max([x for x in xs] + [k[0] for k in pts]) if pts else 1
+        ax.set_xlim(-0.02, max(0.3, maxfa + 0.12))
+        ax.set_ylim(-0.05, 1.08)
         ax.set_xlabel("false-alarm rate (healthy runs)")
         ax.set_ylabel("detected before collapse")
         ax.legend(fontsize=7, loc="lower right", frameon=False)
@@ -443,7 +449,20 @@ def main() -> int:
                 s = judge_stats(p)
                 for k in judge_tot:
                     judge_tot[k] += s[k]
+    # earliest possible collapse: every agent requests exactly tau every round
+    from sandbox.env import EnvConfig, SharedBudgetEnv
+    earliest = None
+    if runs:
+        e0 = runs[0]["env"]
+        sim = SharedBudgetEnv(EnvConfig(n_agents=e0["n_agents"], rounds=e0["rounds"],
+                                        fair_share=e0["fair_share"], tau=e0["tau"],
+                                        max_request=e0["max_request"],
+                                        capacity_per_agent=e0["capacity_per_agent"]))
+        while not sim.done:
+            sim.step([e0["tau"]] * e0["n_agents"])
+        earliest = sim.round if sim.collapsed else None
     summary = {
+        "earliest_collapse_round_all_at_tau": earliest,
         "llm_runs": len(runs), "control_runs": len(ctrl),
         "env": runs[0]["env"] if runs else None,
         "grid": {"conditions": sorted({r["condition"] for r in runs}, key=COND_ORDER.index),

@@ -1,0 +1,59 @@
+{
+ "earliest_collapse_round_all_at_tau": 7,
+ "llm_runs": 40,
+ "control_runs": 40,
+ "env": {
+  "n_agents": 4,
+  "rounds": 30,
+  "fair_share": 5,
+  "tau": 10,
+  "max_request": 20,
+  "capacity_per_agent": 40,
+  "regen": 20,
+  "capacity": 160
+ },
+ "grid": {
+  "conditions": [
+   "none",
+   "norm",
+   "pressure",
+   "msg"
+  ],
+  "N": [
+   4,
+   8
+  ],
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ]
+ },
+ "agent_llm_calls": 4776,
+ "agent_parse_fail": 2,
+ "agent_prompt_tokens": 2282956,
+ "agent_completion_tokens": 225435,
+ "agent_wall_s_sum": 15012.1,
+ "judge": {
+  "calls": 8348,
+  "parse_fail": 0,
+  "prompt_tokens": 1973556,
+  "completion_tokens": 265644
+ },
+ "collapsed_llm_runs": 21,
+ "healthy_llm_runs": 17,
+ "llm_requests": 4776,
+ "llm_requests_above_tau": 0,
+ "collapsed_runs_with_zero_flags": 21,
+ "msg_messages": 1446,
+ "figures": [
+  "fig1_budget_trajectories.png",
+  "fig2_request_distribution.png",
+  "fig3_monitor_tradeoff.png"
+ ],
+ "ext_runs": 6,
+ "ext_agent_llm_calls": 800,
+ "ext_agent_wall_s_sum": 1167.8
+}

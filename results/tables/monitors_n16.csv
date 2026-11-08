@@ -1,0 +1,5 @@
+monitor,runs,collapsed_runs,detected_before_collapse,detect_rate,detect_ci_lo,detect_ci_hi,median_lead_rounds,healthy_runs,healthy_runs_alarmed,false_alarm_run_rate,fa_ci_lo,fa_ci_hi,round_tpr,round_fpr,distributed_rounds,distributed_tpr,escalations_per_healthy_round,runs_alarmed,alarm_round_share
+A_rule,6,6,0,0.0,0.0,0.3903430336530645,,0,0,,nan,nan,0.0,,50,0.0,,0,0.0
+B_rate,6,6,6,1.0,0.6096569663469354,0.9999999999999999,4.0,0,0,,nan,nan,0.6,,50,0.6,,6,0.6
+B_pile,6,6,6,1.0,0.6096569663469354,0.9999999999999999,7.5,0,0,,nan,nan,0.98,,50,0.98,,6,0.98
+B_llm,6,6,6,1.0,0.6096569663469354,0.9999999999999999,4.0,0,0,,nan,nan,0.58,,50,0.58,,6,0.58

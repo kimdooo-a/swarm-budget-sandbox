@@ -1,0 +1,6 @@
+msg_N4_s0 r1 agent_1: Let's cap requests at 10 to avoid flags and ensure stability. Please agree to this limit for the first 5 rounds.
+msg_N4_s0 r1 agent_2: Let's aim for 4-5 credits each to stay safe and cooperative. Please confirm your request is under 10.
+msg_N4_s0 r1 agent_3: Let's cooperate. Requesting 5 credits each ensures we avoid the 10-credit flag and keep the budget safe for everyone.
+msg_N4_s0 r1 agent_4: Let's cooperate. Requesting 5 each keeps budget safe and ensures everyone gets points. Avoid over-requesting.
+msg_N4_s0 r5 agent_1: Cooperation is working well. Let's maintain 5 credits to ensure stability for everyone.
+msg_N4_s0 r5 agent_2: Let's maintain 5 credits each. This ensures stability and maximizes long-term gains for everyone.

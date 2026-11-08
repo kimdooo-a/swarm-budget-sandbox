@@ -19,7 +19,7 @@ Oversight; secondary Track 1: Sandboxes and Testbeds).
 ## Preexisting work
 
 Prior work consists only of one design memo and an environment speed measurement
-(no code, 1-2 November 2026). All code in this repository was written during the event.
+(no code, 1-2 November 2026), plus reading notes on related work (no code). All code in this repository was written during the event.
 
 ## What is in here
 
@@ -80,6 +80,7 @@ Prior work consists only of one design memo and an environment speed measurement
    python run_experiment.py --conditions none pressure --n 16 --seeds 0 1 2 --rounds 30 --parallel-runs 2 --out results/traces_n16
    python judge_traces.py --traces results/traces_n16 --out results/judges_n16 --monitors B_llm
    python analyze.py
+   python scripts/extras.py
    ```
 
 4. Rerun button: `./rerun.sh --seed 3 --condition pressure --n 8` replays one episode with that

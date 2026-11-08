@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.part
+results/rerun/
+results/pilot/
+results/pilot_judges/
+results/_pilot_analysis/
+results/_interim/
